@@ -19,6 +19,9 @@ environment:
       - busybox
       - build-base
 pipeline:
+  - name: Ensure output dir exits
+    runs: |
+      mkdir -p ${{targets.destdir}}
   - name: Create target directories
     runs: |
       echo "Hello World" >${{targets.destdir}}/hello
