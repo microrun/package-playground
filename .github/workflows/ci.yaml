@@ -18,7 +18,7 @@ jobs:
           echo "Determined tag: $RELEASE_TAG"
       - name: Verify that tag doesn't yet exist
         run: |
-          git ls-remote --tags --exit-code origin $RELEASE_TAG && echo "Tag exists already" && exit 1
+          git ls-remote --tags --exit-code origin $RELEASE_TAG && echo "Tag exists already" && exit 1 || echo "Tag doesn't exist yet"
       - name: Flatten repository output
         run: |
           # Turns aarch64/some-package.apk into aarch64_some-package.apk
