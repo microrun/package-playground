@@ -12,9 +12,9 @@ jobs:
           sign-with-temporary-key: true
       - name: Determine tag
         run: |
-          export PACKAGE_VERSION=$(yq '.package.version' <melange.yaml)
-          export PACKAGE_EPOCH=$(yq '.package.epoch' <melange.yaml)
-          export RELEASE_TAG=$PACKAGE_VERSION-r$PACKAGE_EPOCH
+          PACKAGE_VERSION=$(yq '.package.version' <melange.yaml)
+          PACKAGE_EPOCH=$(yq '.package.epoch' <melange.yaml)
+          echo "RELEASE_TAG=$PACKAGE_VERSION-r$PACKAGE_EPOCH" >> $GITHUB_ENV
           echo "Determined tag: $RELEASE_TAG"
       - name: Release
         uses: ncipollo/release-action@v1
