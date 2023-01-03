@@ -10,3 +10,14 @@ jobs:
           archs: x86_64,aarch64
           config: ${{ github.workspace }}/melange.yaml
           sign-with-temporary-key: true
+      - name: Determine tag
+        run: |
+          export PACKAGE_VERSION=$(yq '.package.version' <melange.yaml)
+          export PACKAGE_EPOCH=$(yq '.package.epoch' <melange.yaml)
+          export RELEASE_TAG=$PACKAGE_VERSION-r$PACKAGE_EPOCH
+          echo "Determined tag: $RELEASE_TAG"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{env.RELEASE_TAG}}
+          files: packages/**/*
