@@ -18,9 +18,11 @@ jobs:
           echo "Determined tag: $RELEASE_TAG"
       - name: Verify that tag doesn't yet exist
         run: |
-          git rev-parse --verify $RELEASE_TAG
+          git ls-remote --tags --exit-code origin $RELEASE_TAG
       - name: Flatten repository output
         run: |
+          # Turns aarch64/some-package.apk into aarch64_some-package.apk
+          # Neccesary since GitHub releases has no folder support
           cd packages && find * -type f | sed 'h;y/\//_/;H;g;s/\n/ /g;s/^/mv -v /' | sh
       - name: Release
         uses: ncipollo/release-action@v1
