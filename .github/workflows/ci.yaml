@@ -16,8 +16,11 @@ jobs:
           PACKAGE_EPOCH=$(yq '.package.epoch' <melange.yaml)
           echo "RELEASE_TAG=$PACKAGE_VERSION-r$PACKAGE_EPOCH" >> $GITHUB_ENV
           echo "Determined tag: $RELEASE_TAG"
+      - name: Flatten repository output
+        run: |
+          cd packages && find * -type f | sed 'h;y/\//_/;H;g;s/\n/ /g;s/^/mv -v /' | sh
       - name: Release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{env.RELEASE_TAG}}
-          artifacts: packages/**/*
+          artifacts: packages/*
