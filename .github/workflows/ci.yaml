@@ -1,6 +1,28 @@
 on: [push]
 jobs:
   build-packages:
+    if: ${{ github.ref != 'refs/heads/main' }}
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18
+      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: chainguard-dev/actions/melange-build@main
+        with:
+          archs: x86_64,aarch64
+          config: ${{ github.workspace }}/melange.yaml
+          sign-with-temporary-key: true
+      - name: Determine tag based on melange build
+        run: |
+          PACKAGE_VERSION=$(yq '.package.version' <melange.yaml)
+          PACKAGE_EPOCH=$(yq '.package.epoch' <melange.yaml)
+          RELEASE_TAG=$PACKAGE_VERSION-r$PACKAGE_EPOCH
+          echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
+          echo "Determined tag: $RELEASE_TAG"
+      - name: Verify that tag doesn't exist yet
+        run: |
+          git ls-remote --tags --exit-code origin $RELEASE_TAG && echo "Tag exists already" && exit 1 || echo "Tag doesn't exist yet"
+  release-packages:
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-22.04
     steps:
       - uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18
