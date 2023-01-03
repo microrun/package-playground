@@ -16,6 +16,9 @@ jobs:
           PACKAGE_EPOCH=$(yq '.package.epoch' <melange.yaml)
           echo "RELEASE_TAG=$PACKAGE_VERSION-r$PACKAGE_EPOCH" >> $GITHUB_ENV
           echo "Determined tag: $RELEASE_TAG"
+      - name: Verify that tag doesn't yet exist
+        run: |
+          git rev-parse --verify $RELEASE_TAG
       - name: Flatten repository output
         run: |
           cd packages && find * -type f | sed 'h;y/\//_/;H;g;s/\n/ /g;s/^/mv -v /' | sh
