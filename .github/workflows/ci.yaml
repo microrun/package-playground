@@ -10,13 +10,14 @@ jobs:
           archs: x86_64,aarch64
           config: ${{ github.workspace }}/melange.yaml
           sign-with-temporary-key: true
-      - name: Determine tag
+      - name: Determine tag based on melange build
         run: |
           PACKAGE_VERSION=$(yq '.package.version' <melange.yaml)
           PACKAGE_EPOCH=$(yq '.package.epoch' <melange.yaml)
-          echo "RELEASE_TAG=$PACKAGE_VERSION-r$PACKAGE_EPOCH" >> $GITHUB_ENV
+          RELEASE_TAG=$PACKAGE_VERSION-r$PACKAGE_EPOCH
+          echo "RELEASE_TAG=$RELEASE_TAG=" >> $GITHUB_ENV
           echo "Determined tag: $RELEASE_TAG"
-      - name: Verify that tag doesn't yet exist
+      - name: Verify that tag doesn't exist yet
         run: |
           git ls-remote --tags --exit-code origin $RELEASE_TAG && echo "Tag exists already" && exit 1 || echo "Tag doesn't exist yet"
       - name: Flatten repository output
