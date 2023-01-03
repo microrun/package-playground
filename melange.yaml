@@ -1,7 +1,7 @@
 package:
   name: playground
   version: 0.1.0
-  epoch: 0
+  epoch: 1
   description: "Testing stuff"
   target-architecture:
     - x86_64
