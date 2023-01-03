@@ -15,7 +15,7 @@ jobs:
           PACKAGE_VERSION=$(yq '.package.version' <melange.yaml)
           PACKAGE_EPOCH=$(yq '.package.epoch' <melange.yaml)
           RELEASE_TAG=$PACKAGE_VERSION-r$PACKAGE_EPOCH
-          echo "RELEASE_TAG=$RELEASE_TAG=" >> $GITHUB_ENV
+          echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
           echo "Determined tag: $RELEASE_TAG"
       - name: Verify that tag doesn't exist yet
         run: |
