@@ -1,0 +1,5 @@
+on: [push]
+jobs:
+  build-packages:
+    uses: microrun/actions/.github/workflows/build-packages.yaml@main
+    secrets: inherit
