@@ -1,0 +1,12 @@
+on: [push]
+jobs:
+  build-packages:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18
+      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: chainguard-dev/actions/melange-build@main
+        with:
+          archs: x86_64,aarch64
+          config: ${{ github.workspace }}/melange.yaml
+          sign-with-temporary-key: true

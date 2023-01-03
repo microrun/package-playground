@@ -1,0 +1,24 @@
+package:
+  name: playground
+  version: 0.1.0
+  epoch: 0
+  description: "Testing stuff"
+  target-architecture:
+    - x86_64
+    - aarch64
+  dependencies:
+    runtime:
+
+environment:
+  contents:
+    repositories:
+      - https://dl-cdn.alpinelinux.org/alpine/edge/main
+    packages:
+      - ca-certificates-bundle
+      - alpine-baselayout-data
+      - busybox
+      - build-base
+pipeline:
+  - name: Create target directories
+    runs: |
+      echo "Hello World" >${{targets.destdir}}/hello
